@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>〈張釋之執法〉互動適性挑戰</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts: Noto Sans TC (現代黑體) 與 Nunito (圓潤英數) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --m-border: #1e293b; /* 深色邊框 */
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+        h1, h2, h3, .cartoon-font {
+            font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+        }
+        /* 卡通風格 UI 元素 */
+        .cartoon-box {
+            border: 3px solid var(--m-border);
+            border-radius: 1rem;
+            background-color: white;
+            box-shadow: 6px 6px 0px var(--m-border);
+            transition: all 0.2s ease-in-out;
+        }
+        .cartoon-btn {
+            border: 3px solid var(--m-border);
+            border-radius: 0.75rem;
+            box-shadow: 4px 4px 0px var(--m-border);
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .cartoon-btn:active {
+            box-shadow: 0px 0px 0px var(--m-border);
+            transform: translate(4px, 4px);
+        }
+        .cartoon-input {
+            border: 2px solid var(--m-border);
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 1.125rem;
+            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05);
+            outline: none;
+            transition: all 0.2s;
+        }
+        .cartoon-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        /* 選擇題選項樣式 */
+        .mcq-option {
+            border: 2px solid var(--m-border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+        }
+        .mcq-option:hover {
+            background-color: #f1f5f9;
+            transform: translateX(4px);
+        }
+        .mcq-option.selected {
+            background-color: #fef08a; /* 黃色標示選中 */
+            border-width: 3px;
+        }
+        /* 動畫效果 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        @keyframes pop {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .anim-shake { animation: shake 0.4s ease-in-out; }
+        .anim-pop { animation: pop 0.3s ease-out; }
+        
+        /* 答對答錯狀態 */
+        .status-correct {
+            background-color: #dcfce7 !important; /* 淺綠 */
+            border-color: #16a34a !important;
+            color: #166534;
+        }
+        .status-wrong {
+            background-color: #fee2e2 !important; /* 淺紅 */
+            border-color: #dc2626 !important;
+            color: #991b1b;
+        }
+        .feedback-icon {
+            display: inline-block;
+            margin-left: 0.5rem;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- 頂部標題區 -->
+        <header class="cartoon-box p-6 bg-yellow-300 text-center relative overflow-hidden">
+            <div class="absolute top-[-20px] left-[-20px] text-6xl opacity-20">📜</div>
+            <div class="absolute bottom-[-10px] right-[-10px] text-6xl opacity-20">⚖️</div>
+            <h1 class="text-3xl md:text-5xl font-black mb-2 tracking-wide text-gray-900 drop-shadow-md">〈張釋之執法〉</h1>
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800">課堂適性分流・三階差異化學習挑戰</h2>
+            
+            <div class="mt-6 flex flex-wrap justify-center gap-4 text-lg">
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">班級</label>
+                    <input type="text" class="cartoon-input w-24" placeholder="例如: 801">
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">座號</label>
+                    <input type="number" class="cartoon-input w-20" placeholder="號碼">
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="font-bold">姓名</label>
+                    <input type="text" class="cartoon-input w-32" placeholder="你的名字">
+                </div>
+            </div>
+        </header>
+
+        <!-- 【基礎級】 -->
+        <section class="cartoon-box p-6 md:p-8 bg-blue-50 border-t-8 border-t-blue-400">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">🌱</span>
+                <div>
+                    <h2 class="text-2xl font-black text-blue-800">【基礎級】字詞文意基礎與文言理解</h2>
+                    <p class="text-gray-600 font-bold">適用對象：文言文初學者 / 目標：掌握關鍵字音義與文意</p>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-lg">
+                <!-- Q1 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-blue-200">
+                    <p class="font-bold mb-3"><span class="bg-blue-200 px-2 py-1 rounded text-blue-900 mr-2">第 1 題</span>【名詞定義配對】請為下列解釋選擇正確的名詞（甲、廷尉 / 乙、犯蹕 / 丙、乘輿 / 丁、天下之平）：</p>
+                    <ol class="list-decimal list-inside space-y-2 ml-2">
+                        <li>帝王出巡實施交通管制，禁止通行，違法闖入者：
+                            <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '乙')">
+                                <option value="">請選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option><option value="丁">丁</option>
+                            </select>
+                            <span class="feedback-area inline-block ml-2 text-sm font-bold"></span>
+                        </li>
+                        <li>漢代掌管全國最高司法審判事務的官職：
+                            <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '甲')">
+                                <option value="">請選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option><option value="丁">丁</option>
+                            </select>
+                            <span class="feedback-area inline-block ml-2 text-sm font-bold"></span>
+                        </li>
+                        <li>天子乘坐的車駕，常借代為天子本人：
+                            <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '丙')">
+                                <option value="">請選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option><option value="丁">丁</option>
+                            </select>
+                            <span class="feedback-area inline-block ml-2 text-sm font-bold"></span>
+                        </li>
+                        <li>比喻司法裁判客觀公正的衡量標準：
+                            <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '丁')">
+                                <option value="">請選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option><option value="丁">丁</option>
+                            </select>
+                            <span class="feedback-area inline-block ml-2 text-sm font-bold"></span>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Q2 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-blue-200">
+                    <p class="font-bold mb-3"><span class="bg-blue-200 px-2 py-1 rounded text-blue-900 mr-2">第 2 題</span>【文言字詞與文意填空】閱讀片段並填空：</p>
+                    <p class="bg-gray-100 p-3 rounded-lg mb-3 text-gray-700 italic">「...縣人來，聞【 ① 】，匿橋下。...廷尉奏當：『一人犯蹕，當【 ② 】。』」</p>
+                    <div class="flex flex-col gap-2">
+                        <label>① 縣人聽到的交通管制聲響是：<input type="text" class="cartoon-input w-24" onchange="checkText(this, ['蹕'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span></label>
+                        <label>② 依漢朝法律規定應當判處的刑罰是：<input type="text" class="cartoon-input w-32" onchange="checkText(this, ['罰金'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span></label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-blue-200">
+                    <p class="font-bold mb-3"><span class="bg-blue-200 px-2 py-1 rounded text-blue-900 mr-2">第 3 題</span>【一字多義「當」字配對】（甲：判決結果 / 乙：判處 / 丙：適當、合宜）：</p>
+                    <ul class="space-y-2 ml-2">
+                        <li>(1) 廷尉奏「當」 —— <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '甲')"><option value="">選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option></select><span class="feedback-area inline-block ml-2 text-sm font-bold"></span></li>
+                        <li>(2) 一人犯蹕，「當」罰金 —— <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '乙')"><option value="">選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option></select><span class="feedback-area inline-block ml-2 text-sm font-bold"></span></li>
+                        <li>(3) 廷尉「當」是也 —— <select class="cartoon-input bg-gray-50" onchange="checkSelect(this, '丙')"><option value="">選擇</option><option value="甲">甲</option><option value="乙">乙</option><option value="丙">丙</option></select><span class="feedback-area inline-block ml-2 text-sm font-bold"></span></li>
+                    </ul>
+                </div>
+
+                <!-- Q4 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-blue-200">
+                    <p class="font-bold mb-3"><span class="bg-blue-200 px-2 py-1 rounded text-blue-900 mr-2">第 4 題</span>【通假字與成語填空】「民安所錯其手足？」</p>
+                    <div class="space-y-2">
+                        <p>(1) 句中「錯」通 <input type="text" class="cartoon-input w-16 text-center" onchange="checkText(this, ['措'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span> 字，意思是 <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['安放', '放置', '安放/放置', '安放放置'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>。</p>
+                        <p>(2) 演變為常用成語「手足 <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['無措'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>」（形容舉止慌亂）。</p>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-blue-200">
+                    <p class="font-bold mb-3"><span class="bg-blue-200 px-2 py-1 rounded text-blue-900 mr-2">第 5 題</span>【文言省略主語填空】請填入：漢文帝、縣人、張釋之、騎兵</p>
+                    <p class="leading-relaxed bg-gray-100 p-3 rounded-lg">
+                        「【① <input type="text" class="cartoon-input w-24 text-sm" onchange="checkText(this, ['漢文帝', '文帝'])"><span class="feedback-area block md:inline-block ml-2 text-sm font-bold"></span> 】上行，出中渭橋……於是【② <input type="text" class="cartoon-input w-24 text-sm" onchange="checkText(this, ['漢文帝', '文帝'])"><span class="feedback-area block md:inline-block ml-2 text-sm font-bold"></span> 】使騎捕，【③ <input type="text" class="cartoon-input w-24 text-sm" onchange="checkText(this, ['漢文帝', '文帝'])"><span class="feedback-area block md:inline-block ml-2 text-sm font-bold"></span> 】屬之廷尉。【④ <input type="text" class="cartoon-input w-24 text-sm" onchange="checkText(this, ['張釋之', '釋之'])"><span class="feedback-area block md:inline-block ml-2 text-sm font-bold"></span> 】治問。【⑤ <input type="text" class="cartoon-input w-24 text-sm" onchange="checkText(this, ['縣人'])"><span class="feedback-area block md:inline-block ml-2 text-sm font-bold"></span> 】聞蹕匿橋下。」
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 【中級】 -->
+        <section class="cartoon-box p-6 md:p-8 bg-green-50 border-t-8 border-t-green-400">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">🌲</span>
+                <div>
+                    <h2 class="text-2xl font-black text-green-800">【中級】篇章架構、文意推論與修辭</h2>
+                    <p class="text-gray-600 font-bold">適用對象：一般國二學生 / 目標：推論角色心態與修辭技巧</p>
+                </div>
+            </div>
+
+            <div class="space-y-8 text-lg" id="intermediate-container">
+                <!-- Q1 -->
+                <div class="mcq-group" data-correct="B">
+                    <p class="font-bold mb-3"><span class="bg-green-200 px-2 py-1 rounded text-green-900 mr-2">第 1 題</span>關於〈張釋之執法〉一文的篇章架構與敘事脈絡，下列敘述何者最符合課文內容的推展順序？</p>
+                    <div class="mcq-option" data-val="A" onclick="selectImmediate(this, 'A')">(A) 廷尉奏當罰金 → 文帝震怒質疑 → 中渭橋犯蹕驚馬 → 張釋之據法力爭</div>
+                    <div class="mcq-option" data-val="B" onclick="selectImmediate(this, 'B')">(B) 中渭橋犯蹕驚馬 → 廷尉奏當罰金 → 文帝震怒質疑 → 張釋之據法力爭</div>
+                    <div class="mcq-option" data-val="C" onclick="selectImmediate(this, 'C')">(C) 中渭橋犯蹕驚馬 → 張釋之據法力爭 → 廷尉奏當罰金 → 文帝察納雅言</div>
+                    <div class="mcq-option" data-val="D" onclick="selectImmediate(this, 'D')">(D) 文帝出巡驚馬 → 張釋之治問得情 → 文帝盛怒立誅之 → 廷尉天下之平</div>
+                    <div class="explanation hidden mt-3 p-4 bg-green-100 text-green-900 rounded-lg text-base border-2 border-green-300 shadow-inner">
+                        <strong>🎯 解析：</strong>課文依順敘法展開：中渭橋驚馬 → 張釋之治問奏當罰金 → 文帝震怒質疑 → 張釋之據法力爭 → 文帝稱善。
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="mcq-group" data-correct="C">
+                    <p class="font-bold mb-3"><span class="bg-green-200 px-2 py-1 rounded text-green-900 mr-2">第 2 題</span>漢文帝聽聞張釋之奏當罰金後，怒曰：「此人親驚吾馬...固不敗傷我乎？而廷尉乃當之罰金！」依據文意，文帝這段話表現出何種心理狀態？</p>
+                    <div class="mcq-option" data-val="A" onclick="selectImmediate(this, 'A')">(A) 體恤犯人誤入禁地的情有可原，希望廷尉從輕發落</div>
+                    <div class="mcq-option" data-val="B" onclick="selectImmediate(this, 'B')">(B) 讚賞自己的座車馬匹性情馴良，慶幸自己平安無事</div>
+                    <div class="mcq-option" data-val="C" onclick="selectImmediate(this, 'C')">(C) 認為天子生命權威遭到侵害，因個人情緒而企圖干預法定刑度</div>
+                    <div class="mcq-option" data-val="D" onclick="selectImmediate(this, 'D')">(D) 質疑廷尉張釋之執法過於嚴苛，缺乏仁民愛物的胸懷</div>
+                    <div class="explanation hidden mt-3 p-4 bg-green-100 text-green-900 rounded-lg text-base border-2 border-green-300 shadow-inner">
+                        <strong>🎯 解析：</strong>文帝強調「此人親驚吾馬……令他馬，固不敗傷我乎」，顯示其受害者心理與帝王特權思想，欲以私憤加重刑罰。
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="mcq-group" data-correct="B">
+                    <p class="font-bold mb-3"><span class="bg-green-200 px-2 py-1 rounded text-green-900 mr-2">第 3 題</span>張釋之向文帝進諫：「法者，天子所與天下公共也。今法如此而更重之，是法不信於民也。」這段話的核心法治主張為何？</p>
+                    <div class="mcq-option" data-val="A" onclick="selectImmediate(this, 'A')">(A) 法律是君王統治百姓的專屬工具，百姓必須絕對服從</div>
+                    <div class="mcq-option" data-val="B" onclick="selectImmediate(this, 'B')">(B) 法律面前人人平等且罪刑法定，天子亦不得因一時憤怒而任意加重刑罰</div>
+                    <div class="mcq-option" data-val="C" onclick="selectImmediate(this, 'C')">(C) 司法官員的權力凌駕於君王之上，君王完全無權參與司法審判</div>
+                    <div class="mcq-option" data-val="D" onclick="selectImmediate(this, 'D')">(D) 遇到重大案件時，應當由天下百姓共同投票決定量刑標準</div>
+                    <div class="explanation hidden mt-3 p-4 bg-green-100 text-green-900 rounded-lg text-base border-2 border-green-300 shadow-inner">
+                        <strong>🎯 解析：</strong>「天子所與天下公共」指法律一體適用，「今法如此而更重之，是法不信於民」體現罪刑法定與立信於民。
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="mcq-group" data-correct="A">
+                    <p class="font-bold mb-3"><span class="bg-green-200 px-2 py-1 rounded text-green-900 mr-2">第 4 題</span>關於課文中各文句所運用的修辭手法，下列說明何者完全正確？</p>
+                    <div class="mcq-option" data-val="A" onclick="selectImmediate(this, 'A')">(A) 「令他馬，固不敗傷我乎？」——運用「激問（反詰）」修辭，答案在問題的反面</div>
+                    <div class="mcq-option" data-val="B" onclick="selectImmediate(this, 'B')">(B) 「廷尉，天下之平也」——運用「借代」修辭，將廷尉借代為天子</div>
+                    <div class="mcq-option" data-val="C" onclick="selectImmediate(this, 'C')">(C) 「吾馬賴柔和」——運用「轉化」修辭，將馬擬人化</div>
+                    <div class="mcq-option" data-val="D" onclick="selectImmediate(this, 'D')">(D) 「民安所錯其手足？」——運用「提問」修辭，旨在引導讀者深思但自問自答</div>
+                    <div class="explanation hidden mt-3 p-4 bg-green-100 text-green-900 rounded-lg text-base border-2 border-green-300 shadow-inner">
+                        <strong>🎯 解析：</strong>(A)答案在問題反面（必定傷害我），為反詰（激問）；(B)「平」借代法秤，而非借代天子；(C)「吾馬賴柔和」為倒裝句（賴吾馬柔和）；(D)答案在反面（必無所措），亦為激問。
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="mcq-group" data-correct="C">
+                    <p class="font-bold mb-3"><span class="bg-green-200 px-2 py-1 rounded text-green-900 mr-2">第 5 題</span>文章末尾寫文帝「良久，上曰：『廷尉當是也。』」作者以「良久」二字作結，在人物刻畫與主旨呈現上具有何種深意？</p>
+                    <div class="mcq-option" data-val="A" onclick="selectImmediate(this, 'A')">(A) 表現文帝個性優柔寡斷，毫無天子威儀與決斷力</div>
+                    <div class="mcq-option" data-val="B" onclick="selectImmediate(this, 'B')">(B) 描寫文帝故意拖延時間，以冷處理的方式抗議廷尉的判決</div>
+                    <div class="mcq-option" data-val="C" onclick="selectImmediate(this, 'C')">(C) 生動刻畫文帝在帝王面子與國家法治間的內心掙扎，最終平息私憤、察納雅言</div>
+                    <div class="mcq-option" data-val="D" onclick="selectImmediate(this, 'D')">(D) 暗示文帝迫於群臣壓力，心中雖極度不服但表面勉強妥協</div>
+                    <div class="explanation hidden mt-3 p-4 bg-green-100 text-green-900 rounded-lg text-base border-2 border-green-300 shadow-inner">
+                        <strong>🎯 解析：</strong>「良久」表示時間長久，傳神寫出文帝內心天人交戰，最終以理智克制私憤，展現明君雅量。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 【進階級】 -->
+        <section class="cartoon-box p-6 md:p-8 bg-purple-50 border-t-8 border-t-purple-400">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">👑</span>
+                <div>
+                    <h2 class="text-2xl font-black text-purple-800">【進階級】跨章節類文對照與深層思辨</h2>
+                    <p class="text-gray-600 font-bold">適用對象：資優學生 / 目標：高層次法律思辨與批判思考</p>
+                </div>
+            </div>
+
+            <!-- 類文閱讀 -->
+            <div class="bg-white p-4 rounded-xl border-2 border-purple-200 mb-6 relative shadow-inner">
+                <div class="absolute -top-3 -left-3 text-3xl">📖</div>
+                <h3 class="font-bold text-purple-900 mb-2 border-b-2 border-purple-100 pb-2">《史記·張釋之馮唐列傳》（高廟盜玉環案）節錄：</h3>
+                <p class="text-gray-700 leading-relaxed text-sm md:text-base">
+                    「有人盜高廟（漢高祖宗廟）坐前玉環，捕得，文帝怒，下廷尉治。釋之案律：『盜宗廟服御物者為死罪』，奏當棄市（處死並暴屍街頭）。上大怒曰：『人之無道，乃盜先帝廟器！吾屬廷尉者，欲致之族（誅滅九族），而君以法奏之，非吾所以共承宗廟意也！』釋之免冠頓首謝曰：『法如是足也。且罪等，會有甚焉，何以加之？今盜宗廟器而族之，有如萬分之一，假令愚民取長陵一抔土，陛下何以加其法乎？』文帝與太后言之，乃許廷尉當。」
+                </p>
+            </div>
+
+            <div class="space-y-6 text-lg">
+                <!-- Q1 -->
+                <div class="p-4 bg-white rounded-xl border-2 border-purple-200">
+                    <p class="font-bold mb-3"><span class="bg-purple-200 px-2 py-1 rounded text-purple-900 mr-2">第 1 題</span>【類文情節檢索對照】</p>
+                    <ul class="space-y-3">
+                        <li>(1) 〈犯蹕案〉中，文帝盛怒本想予以【① <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['立誅之', '處死'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>】，張釋之奏當【② <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['罰金'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>】。</li>
+                        <li>(2) 〈盜玉環案〉中，文帝盛怒意欲誅滅其【③ <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['九族', '族', '族誅', '滅九族'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>】，張釋之奏當【④ <input type="text" class="cartoon-input w-24" onchange="checkText(this, ['棄市', '死罪'])"><span class="feedback-area inline-block ml-2 text-sm font-bold"></span>】。</li>
+                    </ul>
+                </div>
+
+                <!-- 申論題區塊 (Q2~Q5) -->
+                <div class="space-y-6">
+                    <p class="text-sm font-bold text-purple-600 bg-purple-100 p-2 rounded text-center">👇 以下為申論思考題，請在作答後點擊「顯示參考解答」自我檢核 👇</p>
+                    
+                    <!-- Q2 -->
+                    <div class="p-4 bg-white rounded-xl border-2 border-purple-200">
+                        <p class="font-bold mb-2"><span class="bg-purple-200 px-2 py-1 rounded text-purple-900 mr-2">第 2 題</span>【法律邏輯推論】張釋之在〈盜玉環案〉中的精闢說理（取長陵一抔土...），體現了現代法律學上的哪一項重要原則？</p>
+                        <textarea class="w-full cartoon-input h-24 mb-2" placeholder="請寫下你的想法..."></textarea>
+                        <button onclick="toggleAnswer('ans_q2')" class="text-purple-600 font-bold hover:text-purple-800 text-sm underline">👁️ 顯示/隱藏參考解答</button>
+                        <div id="ans_q2" class="hidden mt-3 p-3 bg-gray-50 border-l-4 border-purple-400 text-sm text-gray-700">
+                            <strong>參考解答：</strong>體現「罪刑相當原則（比例原則）」與「罪刑法定原則」。若偷盜玉環就判最嚴重的誅滅九族，未來若有人犯下更嚴重的盜毀陵墓，法律將無更高刑罰可用。刑度必須配合罪行深淺層層遞進。
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 bg-white rounded-xl border-2 border-purple-200">
+                        <p class="font-bold mb-2"><span class="bg-purple-200 px-2 py-1 rounded text-purple-900 mr-2">第 3 題</span>【執法困境剖析】在專制政體下，張釋之為何要特別強調「立誅之」與「下廷尉」的分界？</p>
+                        <textarea class="w-full cartoon-input h-24 mb-2" placeholder="請寫下你的想法..."></textarea>
+                        <button onclick="toggleAnswer('ans_q3')" class="text-purple-600 font-bold hover:text-purple-800 text-sm underline">👁️ 顯示/隱藏參考解答</button>
+                        <div id="ans_q3" class="hidden mt-3 p-3 bg-gray-50 border-l-4 border-purple-400 text-sm text-gray-700">
+                            <strong>參考解答：</strong>皇帝在事發當場擁有超越法律的特權（立誅之）；但一旦「下廷尉」移送法定司法體系，就代表回歸常態法律程序。此時司法官必須捍衛制度獨立性，不可受君王情緒左右，體現爭取「法定程序正義」的高度智慧。
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="p-4 bg-white rounded-xl border-2 border-purple-200">
+                        <p class="font-bold mb-2"><span class="bg-purple-200 px-2 py-1 rounded text-purple-900 mr-2">第 4 題</span>【人物評價反思】請評析漢文帝在面對司法獨立時，所展現出的君王特質與歷史價值。</p>
+                        <textarea class="w-full cartoon-input h-24 mb-2" placeholder="請寫下你的想法..."></textarea>
+                        <button onclick="toggleAnswer('ans_q4')" class="text-purple-600 font-bold hover:text-purple-800 text-sm underline">👁️ 顯示/隱藏參考解答</button>
+                        <div id="ans_q4" class="hidden mt-3 p-3 bg-gray-50 border-l-4 border-purple-400 text-sm text-gray-700">
+                            <strong>參考解答：</strong>文帝雖有凡人之盛怒，但他能沉思「良久」，克制專制君主的無限權力，理智聽取抗辯並尊重司法判決（廷尉當是也）。這展現了文帝察納雅言、克己尊法、不以私害公的明君胸襟與法治雅量。
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="p-4 bg-white rounded-xl border-2 border-purple-200">
+                        <p class="font-bold mb-2"><span class="bg-purple-200 px-2 py-1 rounded text-purple-900 mr-2">第 5 題</span>【生活情境思辨】班長因代表學校比賽得獎而遲到，導師認為應免除「遲到罰抄」班規，副班長則主張「法者天下公共也」應受罰。如果你是法官，支持哪方？</p>
+                        <textarea class="w-full cartoon-input h-32 mb-2" placeholder="請寫下你的理由 (無標準答案，言之成理即可)..."></textarea>
+                        <button onclick="toggleAnswer('ans_q5')" class="text-purple-600 font-bold hover:text-purple-800 text-sm underline">👁️ 顯示/隱藏參考論點</button>
+                        <div id="ans_q5" class="hidden mt-3 p-3 bg-gray-50 border-l-4 border-purple-400 text-sm text-gray-700 space-y-2">
+                            <strong>參考論點：</strong><br>
+                            【支持受罰】：法律面前人人平等。班長雖為校爭光，功過應分開計算。學校可另給獎勵，但班規應一體適用，若因人設事破例，將使班規失去公信力。<br>
+                            【支持免罰】：現代法治亦重視「實質正當理由（阻卻違法事由）」。班長遲到係履行公務，缺乏違規惡意且具公益性，機械式執法將造成實質不公，符合免責正當事由。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 font-bold pb-8">
+            <p>🌟 恭喜你完成所有挑戰！學習是一段不斷進步的旅程 🌟</p>
+        </footer>
+    </div>
+
+    <!-- 提示框元件 (替代 alert) -->
+    <div id="msgBox" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-2xl border-4 border-gray-800 shadow-[8px_8px_0px_#1e293b] max-w-sm w-full text-center transform transition-transform scale-90" id="msgBoxContent">
+            <div class="text-5xl mb-4" id="msgIcon">💡</div>
+            <h3 class="text-2xl font-black mb-2" id="msgTitle">提示</h3>
+            <p class="text-gray-700 font-bold mb-6" id="msgText">訊息內容</p>
+            <button onclick="closeMsgBox()" class="cartoon-btn bg-blue-500 text-white px-6 py-2 text-lg w-full">知道了！</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 訊息框邏輯 ---
+        function showMsgBox(title, text, icon = '💡') {
+            const box = document.getElementById('msgBox');
+            const content = document.getElementById('msgBoxContent');
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgText').innerText = text;
+            document.getElementById('msgIcon').innerText = icon;
+            
+            box.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-90');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeMsgBox() {
+            const box = document.getElementById('msgBox');
+            const content = document.getElementById('msgBoxContent');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-90');
+            setTimeout(() => {
+                box.classList.add('hidden');
+            }, 200);
+        }
+
+        // --- 即時評分邏輯 (文字輸入與下拉選單) ---
+        function checkText(el, validAnswers) {
+            const val = el.value.trim();
+            const feedbackSpan = el.nextElementSibling;
+            
+            if (val === '') {
+                el.classList.remove('status-correct', 'status-wrong', 'anim-pop', 'anim-shake');
+                if(feedbackSpan) feedbackSpan.innerHTML = '';
+                return;
+            }
+            
+            const isCorrect = validAnswers.some(ans => val === ans || (val.includes(ans) && ans.length > 1));
+            
+            el.classList.remove('status-correct', 'status-wrong', 'anim-pop', 'anim-shake');
+            
+            if (isCorrect) {
+                el.classList.add('status-correct', 'anim-pop');
+                if(feedbackSpan) {
+                    feedbackSpan.innerHTML = '✅ 答對了！';
+                    feedbackSpan.className = 'feedback-area inline-block ml-2 text-sm font-bold text-green-600 anim-pop';
+                }
+            } else {
+                el.classList.add('status-wrong', 'anim-shake');
+                if(feedbackSpan) {
+                    feedbackSpan.innerHTML = `❌ 答錯囉！正確為：${validAnswers[0]}`;
+                    feedbackSpan.className = 'feedback-area inline-block ml-2 text-sm font-bold text-red-600 anim-pop';
+                }
+            }
+        }
+
+        function checkSelect(el, correctVal) {
+            const val = el.value;
+            const feedbackSpan = el.nextElementSibling;
+            
+            if (val === '') {
+                el.classList.remove('status-correct', 'status-wrong', 'anim-pop', 'anim-shake');
+                if(feedbackSpan) feedbackSpan.innerHTML = '';
+                return;
+            }
+            
+            el.classList.remove('status-correct', 'status-wrong', 'anim-pop', 'anim-shake');
+            
+            if (val === correctVal) {
+                el.classList.add('status-correct', 'anim-pop');
+                if(feedbackSpan) {
+                    feedbackSpan.innerHTML = '✅ 答對了！';
+                    feedbackSpan.className = 'feedback-area inline-block ml-2 text-sm font-bold text-green-600 anim-pop';
+                }
+            } else {
+                el.classList.add('status-wrong', 'anim-shake');
+                if(feedbackSpan) {
+                    feedbackSpan.innerHTML = `❌ 答錯囉！正確為：${correctVal}`;
+                    feedbackSpan.className = 'feedback-area inline-block ml-2 text-sm font-bold text-red-600 anim-pop';
+                }
+            }
+        }
+
+        // --- 【中級】單選題即時邏輯 ---
+        function selectImmediate(element, value) {
+            const group = element.closest('.mcq-group');
+            if (group.hasAttribute('data-answered')) return; // 已作答則鎖定不給重按
+            group.setAttribute('data-answered', 'true');
+
+            const correctAns = group.getAttribute('data-correct');
+            const options = group.querySelectorAll('.mcq-option');
+            const explanation = group.querySelector('.explanation');
+
+            options.forEach(opt => {
+                const optVal = opt.getAttribute('data-val');
+                const isSelected = opt === element;
+                const isCorrectOpt = (optVal === correctAns);
+
+                // 鎖定所有的選項（禁用點擊與懸浮效果）
+                opt.style.pointerEvents = 'none';
+
+                if (isSelected && value === correctAns) {
+                    // 選對了
+                    opt.classList.add('status-correct', 'anim-pop');
+                    opt.innerHTML += '<span class="float-right text-xl">✅</span>';
+                } else if (isSelected && value !== correctAns) {
+                    // 選錯了
+                    opt.classList.add('status-wrong', 'anim-shake');
+                    opt.innerHTML += '<span class="float-right text-xl">❌</span>';
+                }
+
+                if (isCorrectOpt && value !== correctAns) {
+                    // 如果選錯，把正確答案標示出來
+                    opt.classList.add('bg-green-100', 'border-green-500', 'border-2');
+                    opt.innerHTML += '<span class="float-right text-green-700 font-bold anim-pop">👈 正確答案</span>';
+                }
+            });
+
+            // 顯示解析
+            if(explanation) {
+                explanation.classList.remove('hidden');
+                explanation.classList.add('anim-pop');
+            }
+        }
+
+        // 申論題隱藏/顯示參考答案
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.classList.add('anim-pop');
+            } else {
+                el.classList.add('hidden');
+                el.classList.remove('anim-pop');
+            }
+        }
+    </script>
+</body>
+</html>
